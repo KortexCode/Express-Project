@@ -1,6 +1,6 @@
-import faker from '../utils/faker';
-import express from '../utils/express';
-
+const faker = require('../utils/faker');
+const express = require('../utils/express');
+//Se debe crear un enrutador de express
 const router = express.Router();
 
 //Crear productos
@@ -19,9 +19,9 @@ function productMaker(size) {
 	return product;
 }
 
-//Indicaremos varios tipos de ruta
-//Dedemos saber que normalmente trabajaremos como una API por eso es
-//mejor devolver un formato .json
+//Ahora usaremos el router para las peticiones o respuestas e ignoraremos
+//la ruta principal, en este caso product, dejaremos las partes dinámicas
+//y específicas que sigan
 router.get('/', (req, res) => {
 	const { limit, offset, size } = req.query;
 	if (size) {
@@ -42,4 +42,14 @@ router.get('/:id', (req, res) => {
 	res.json(resObject);
 });
 
-export default router;
+//Solicitud de creación de un producto
+
+router.post('/', (req, res) => {
+	const body = req.body;
+	res.json({
+		message: 'create',
+		data: body,
+	});
+});
+
+module.exports = router;

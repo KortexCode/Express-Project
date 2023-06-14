@@ -1,6 +1,6 @@
 console.log('Chikorita esto es NODE!!');
-const express = require('express');
-import routerApi from './routes';
+const express = require('./utils/express');
+const routerApi = require('./routes');
 
 //SERVIDOR HTTP
 const app = express();
@@ -8,19 +8,15 @@ const app = express();
 //Indicamos por cual puerto se establecerá la comunicación entre el
 //servidor y el navegador
 const port = 3000;
+//Middleware nativo para poder recibir datos con post
+app.use(express.json());
 app.listen(port, () => {
 	console.log('CHikorita, estoy escuchando por el 3000');
 });
 
-//HOME
-app.get('/', (req, res) => {
-	res.send('Este es un mensaje del servidor Chikorita');
-});
-
 routerApi(app);
 
-/*
-app.get('/categorias/:categoriaId/productos/:productoId', (req, res) => {
+/* app.get('/categorias/:categoriaId/productos/:productoId', (req, res) => {
 	const resCategory = categoryMaker().filter(item => {
 		const { categoriaId } = req.params;
 		return item.id === parseInt(categoriaId, 10);
@@ -31,4 +27,5 @@ app.get('/categorias/:categoriaId/productos/:productoId', (req, res) => {
 	});
 	const resTotal = [resCategory, resProducto];
 	res.json(resTotal);
-}); */
+});
+ */

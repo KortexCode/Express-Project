@@ -1,5 +1,5 @@
-import faker from '../utils/faker';
-import express from '../utils/express';
+const faker = require('../utils/faker');
+const express = require('../utils/express');
 
 const router = express.Router();
 
@@ -29,4 +29,4 @@ router.get('/categorias/:id', (req, res) => {
 	res.json(resObject);
 });
 
-export default router;
+module.exports = router;
