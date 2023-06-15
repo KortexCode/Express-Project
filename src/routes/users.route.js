@@ -1,5 +1,5 @@
 const express = require('../utils/express');
-const ProductService = require('../service/product.service');
+const ProductService = require('../service/user.service');
 
 //Se debe crear un enrutador de express
 const router = express.Router();
