@@ -9,31 +9,38 @@ const service = new ProductService();
 //Ahora usaremos el router para las peticiones o respuestas e ignoraremos
 //la ruta principal, en este caso api/v1/product, dejaremos las partes dinámicas
 //y específicas solamente
-router.get('/', (req, res) => {
-	const { limit, offset, size } = req.query;
-	if (size) {
-		res.json(service.find());
-	} else if (limit && offset) {
-		res.json([{ limit, offset }, service.find()]);
-	} else {
-		res.json(service.find());
+router.get('/', async (req, res) => {
+	try {
+		const { limit, offset, size } = req.query;
+		if (size) {
+			res.json(await service.find());
+		} else if (limit && offset) {
+			res.json([{ limit, offset }, await service.find()]);
+		} else {
+			res.json(await service.find());
+		}
+	} catch (error) {
+		res.status(404).json({ message: error.message });
 	}
 });
 
 //Solicitud de un producto
-router.get('/:id', (req, res) => {
-	const { id } = req.params;
-	const requireId = parseInt(id, 10);
-	const product = service.findOne(requireId);
-
-	if (product) res.status(200).json(product);
-	else res.status(404).json({ message: 'Error, no found' });
+router.get('/:id', async (req, res, next) => {
+	try {
+		const { id } = req.params;
+		const requireId = parseInt(id, 10);
+		const product = await service.findOne(requireId);
+		res.status(200).json(product);
+	} catch (error) {
+		/* res.status(404).json({ message: 'Error, product no found' }); */
+		next(error);
+	}
 });
 
 //Solicitud de creación de un producto
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
 	const body = req.body;
-	service.create(body);
+	await service.create(body);
 	res.status(201).json({
 		message: 'create',
 		data: body,
@@ -41,39 +48,50 @@ router.post('/', (req, res) => {
 });
 
 //Solicitud de actualización de un producto de forma parcial
-router.put('/:id', (req, res) => {
-	const { id } = req.params;
-	const reqId = parseInt(id, 10);
-	const body = req.body;
-	service.update(reqId, body);
-	res.json({
-		message: 'update',
-		data: body,
-		reqId,
-	});
+router.put('/:id', async (req, res) => {
+	try {
+		const { id } = req.params;
+		const reqId = parseInt(id, 10);
+		const body = req.body;
+		const resItem = await service.update(reqId, body);
+		res.status(200).json({
+			message: 'update',
+			data: resItem,
+			reqId,
+		});
+	} catch (error) {
+		res.status(404).json({ message: error.message });
+	}
 });
 
 //Solicitud de actualización de un producto de forma parcial
-router.patch('/:id', (req, res) => {
-	const { id } = req.params;
-	const reqId = parseInt(id, 10);
-	const body = req.body;
-	service.partialUpdate(reqId, body);
-	res.json({
-		message: 'update',
-		data: body,
-		reqId,
-	});
+router.patch('/:id', async (req, res) => {
+	try {
+		const { id } = req.params;
+		const reqId = parseInt(id, 10);
+		const body = req.body;
+		const resItem = await service.partialUpdate(reqId, body);
+		res.status(200).json({
+			message: 'update',
+			data: resItem,
+		});
+	} catch (error) {
+		res.status(404).json({ message: error.message });
+	}
 });
 //Solicitud de eliminación de un producto
-router.delete('/:id', (req, res) => {
-	const { id } = req.params;
-	const reqId = parseInt(id, 10);
-	service.delete(reqId);
-	res.json({
-		message: 'delete',
-		reqId,
-	});
+router.delete('/:id', async (req, res) => {
+	try {
+		const { id } = req.params;
+		const reqId = parseInt(id, 10);
+		const resItem = await service.delete(reqId);
+		res.status(200).json({
+			message: 'delete',
+			resItem,
+		});
+	} catch (error) {
+		res.status(404).json({ message: error.message });
+	}
 });
 
 module.exports = router;
