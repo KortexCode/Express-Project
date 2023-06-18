@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res, next) => {
 	try {
 		const { id } = req.params;
-		const requireId = parseInt(id, 10);
+		const requireId = parseInt(id);
 		const product = await service.findOne(requireId);
 		res.status(200).json(product);
 	} catch (error) {

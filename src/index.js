@@ -18,8 +18,8 @@ app.listen(port, () => {
 //Llamado a la función manejadora de rutas, la mini-app.
 routerApi(app);
 //Middlewares para manejar errores en la app de manera global
-app.use(logErrors);
-app.use(errorHandler);
+app.use(logErrors, errorHandler);
+/* app.use(); */
 /* app.get('/categorias/:categoriaId/productos/:productoId', (req, res) => {
 	const resCategory = categoryMaker().filter(item => {
 		const { categoriaId } = req.params;
