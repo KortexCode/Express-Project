@@ -30,7 +30,6 @@ class ProductService {
 		});
 	}
 	async findOne(id) {
-		/* const testerror = createError(); */
 		const index = this.products.findIndex(item => {
 			return id === item.id;
 		});
