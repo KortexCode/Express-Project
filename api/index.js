@@ -17,7 +17,7 @@ routerApi(app);
 const whitelist = ['http://127.0.0.1:5500', 'http://www.example.com'];
 const option = {
 	origin: (origin, callback) => {
-		const isAllowed = whitelist.includes(origin) || origin;
+		const isAllowed = whitelist.includes(origin);
 		if (isAllowed) {
 			callback(null, true);
 		} else {
