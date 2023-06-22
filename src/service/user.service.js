@@ -28,10 +28,8 @@ class UserService {
 		this.users.push(data);
 	}
 	update(id, data) {
-		console.log('first');
 		const usersUpdate = this.users.map(item => {
 			if (id === item.id) {
-				console.log('actualiza', data);
 				return data;
 			}
 			return item;
@@ -42,7 +40,6 @@ class UserService {
 		const usersUpdate = this.users.map(item => {
 			if (id === item.id) {
 				const itemUpdate = { ...item, ...data };
-				console.log('partial', itemUpdate);
 				return itemUpdate;
 			}
 			return item;
@@ -50,13 +47,6 @@ class UserService {
 		this.users = usersUpdate;
 	}
 	delete(id) {
-		/* this.users.map((item, index) => {
-			if (id === item.id) {
-				this.users.splice(index, 1);
-			}
-			return item;
-		});
- */
 		this.users.forEach((item, index) => {
 			if (id === item.id) {
 				this.users.splice(index, 1);

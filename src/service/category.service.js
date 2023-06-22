@@ -28,10 +28,8 @@ class CategoryService {
 		this.categories.push(data);
 	}
 	update(id, data) {
-		console.log('first');
 		const categoriesUpdate = this.categories.map(item => {
 			if (id === item.id) {
-				console.log('actualiza', data);
 				return data;
 			}
 			return item;
@@ -42,7 +40,6 @@ class CategoryService {
 		const categoriesUpdate = this.categories.map(item => {
 			if (id === item.id) {
 				const itemUpdate = { ...item, ...data };
-				console.log('partial', itemUpdate);
 				return itemUpdate;
 			}
 			return item;

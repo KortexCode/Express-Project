@@ -40,7 +40,6 @@ router.get(
 			const product = await service.findOne(requireId);
 			res.status(200).json(product);
 		} catch (error) {
-			console.log('entro al error');
 			const typeError = new Error(error.message);
 			typeError.statusCode = '404';
 			typeError.error = 'Not Found';
