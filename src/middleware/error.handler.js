@@ -3,6 +3,7 @@ function logErrors(err, req, res, next) {
 }
 
 function errorHandler(err, req, res, next) {
+	console.log('status Code', err.statusCode);
 	res.status(err.statusCode).json({
 		statusCode: err.statusCode,
 		error: err.error,
