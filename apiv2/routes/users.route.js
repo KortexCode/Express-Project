@@ -9,14 +9,18 @@ const service = new ProductService();
 //Ahora usaremos el router para las peticiones o respuestas e ignoraremos
 //la ruta principal, en este caso api/v1/product, dejaremos las partes dinámicas
 //y específicas solamente
-router.get('/', async (req, res) => {
-	const { limit, offset, size } = req.query;
-	if (size) {
-		res.json(service.find());
-	} else if (limit && offset) {
-		res.json([{ limit, offset }, service.find()]);
-	} else {
-		res.json(await service.find());
+router.get('/', async (req, res, next) => {
+	try {
+		const { limit, offset, size } = req.query;
+		if (size) {
+			res.json(service.find());
+		} else if (limit && offset) {
+			res.json([{ limit, offset }, service.find()]);
+		} else {
+			res.json(await service.find());
+		}
+	} catch (error) {
+		next(error);
 	}
 });
 

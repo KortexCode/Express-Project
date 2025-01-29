@@ -2,6 +2,7 @@ const express = require('../utils/express');
 const productRouter = require('./products.route');
 const categoryRouter = require('./categories.route');
 const userRouter = require('./users.route');
+const orderRouter = require('./order.route');
 
 // Se crea una función para enrutar todas la rutas antes creadas
 //usando el .use objeto indicamos la ruta y luego sus endpoits
@@ -22,6 +23,7 @@ function routerApi(app) {
 	router.use('/product', productRouter);
 	router.use('/category', categoryRouter);
 	router.use('/user', userRouter);
+	router.use('/order', orderRouter);
 	app.use('/api/v1', router);
 }
 
