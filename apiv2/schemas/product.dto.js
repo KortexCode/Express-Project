@@ -2,11 +2,11 @@ const joi = require('joi');
 
 const id = joi.string().min(1).max(3);
 const name = joi.string().min(5).max(60);
-const price = joi.string().min(1).max(10);
+const price = joi.number().min(1).max(1000);
 const image = joi.string().min(5).max(60);
 
 const createProductSchema = joi.object({
-	id: id.required(),
+	id: id,
 	name: name.required(),
 	price: price.required(),
 	image: image.required(),

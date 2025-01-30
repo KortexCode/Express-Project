@@ -14,8 +14,7 @@ const service = new ProductService();
 //Ahora usaremos el router para las peticiones o respuestas e ignoraremos
 //la ruta principal, en este caso api/v1/product, dejaremos las partes dinámicas
 //y específicas solamente
-router.get('/', async (req, res) => {
-	console.log('HOLAAA');
+router.get('/', async (req, res, next) => {
 	try {
 		const { limit, offset, size } = req.query;
 		if (size) {
@@ -26,7 +25,10 @@ router.get('/', async (req, res) => {
 			res.json(await service.find());
 		}
 	} catch (error) {
-		res.status(404).json({ message: error.message });
+		const typeError = new Error(error.message);
+		typeError.statusCode = '404';
+		typeError.error = 'Not Found';
+		next(typeError);
 	}
 });
 
@@ -54,12 +56,16 @@ router.post(
 	'/',
 	validatorHandler(createProductSchema, 'body'),
 	async (req, res) => {
-		const body = req.body;
-		await service.create(body);
-		res.status(201).json({
-			message: 'create',
-			data: body,
-		});
+		try {
+			const body = req.body;
+			await service.create(body);
+			res.status(201).json({
+				message: 'create',
+				data: body,
+			});
+		} catch (error) {
+			console.log(error);
+		}
 	}
 );
 

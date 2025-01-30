@@ -11,15 +11,9 @@ class UserService {
 	}
 
 	async find() {
-		try {
-			const client = await clientGetConnection();
-			const rta = await client.query('SELECT * FROM tasks');
-			console.log('tablas', rta.rows);
-			return rta.rows;
-		} catch (error) {
-			console.error('Error en la consulta:', error);
-			throw new Error('No se pudo obtener los datos de la base de datos');
-		}
+		const client = await clientGetConnection();
+		const rta = await client.query('SELECT * FROM tasks');
+		return rta.rows;
 	}
 
 	findOne(id) {

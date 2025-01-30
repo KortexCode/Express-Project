@@ -1,10 +1,19 @@
 const faker = require('../utils/faker');
-const clientGetConnection = require('../libs/postgres');
+const pool = require('../libs/postgres.pool');
+
 //Se crea la clase Para manejar la lógica del producto
 class ProductService {
 	constructor() {
+		if (ProductService.instance) {
+			return this;
+		}
+		ProductService.instance = this;
 		this.products = [];
 		this.generate();
+		this.pool = pool;
+		this.pool.on('error', err => {
+			console.error('Error en conexión', err);
+		});
 	}
 
 	generate() {
@@ -20,38 +29,35 @@ class ProductService {
 			this.products.push(item);
 		}
 	}
+
 	async find() {
-		/* return new Promise((resolve, reject) => {
-			setTimeout(() => {
-				if (!this.products.length) {
-					reject(Error('products not found'));
-				}
-				resolve(this.products);
-			}, 3000);
-		}); */
-		const client = await clientGetConnection();
-		const rta = await client.query('SELECT * FROM tasks');
-		console.log('tablas', rta.rows);
+		const query = 'SELECT * FROM tasks';
+		const rta = await this.pool.query(query);
 		return rta.rows;
 	}
 	async findOne(id) {
-		const index = this.products.findIndex(item => {
-			return id === item.id;
-		});
-		if (index === -1) {
+		const query = `SELECT id, title, completed FROM tasks WHERE id=${id}`;
+		const rta = await this.pool.query(query);
+		const product = rta.rows;
+		if (!product[0]) {
 			throw new Error('product not found');
 		} else {
-			return this.products[index];
+			return product;
 		}
 	}
 	async create(data) {
-		const { id, name, price, image } = data;
-		this.products.push({
-			id,
-			name,
-			price,
-			image,
-		});
+		try {
+			const { name, price, image } = data;
+			console.log('los valores llegan?', name, price);
+			const query =
+				'INSERT INTO products(name, price, image) VALUES($1, $2, $3)';
+			const values = [name, price, image];
+			console.log('CREANDO PRODUCTO');
+			await this.pool.query(query, values);
+		} catch (error) {
+			console.log(error);
+		}
+		/* console.log('Resultado', rta); */
 	}
 	async update(id, data) {
 		const index = this.products.findIndex(item => {
