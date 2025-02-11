@@ -69,7 +69,7 @@ router.post(
 	}
 );
 
-//Solicitud de actualización de un producto de forma parcial
+//Solicitud de actualización de un producto de forma completa
 router.put(
 	'/:id',
 	validatorHandler(getProductSchema, 'params'),
@@ -101,6 +101,7 @@ router.patch(
 			const { id } = req.params;
 			const reqId = parseInt(id, 10);
 			const body = req.body;
+			console.log(body);
 			const resItem = await service.partialUpdate(reqId, body);
 			res.status(200).json({
 				message: 'update',
